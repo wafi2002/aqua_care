@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "329052531093",
+    "project_id": "aqua-care-285a9",
+    "storage_bucket": "aqua-care-285a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329052531093:android:1ba6430f03839d80e8ee9c",
+        "android_client_info": {
+          "package_name": "com.aquacare.aqua_care"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv3dczf8SGjoR7-ZzLftL8fEUyCUzirgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

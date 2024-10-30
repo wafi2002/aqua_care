@@ -1,0 +1,58 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin" // Keep Flutter Gradle Plugin
+    id 'com.google.gms.google-services' // Google services for Firebase
+}
+
+// Load keystore properties for signing
+def keystoreProperties = new Properties()
+def keystoreFile = rootProject.file('key.properties')
+if (keystoreFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystoreFile))
+}
+
+android {
+    namespace = "com.aquacare.aqua_care" // Set the namespace for your app correctly
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.aquacare.aqua_care" // Unique Application ID
+        minSdk = 23 // Updated Minimum SDK version to 23
+        targetSdk = flutter.targetSdkVersion // Target SDK version
+        versionCode = flutter.versionCode // Version code for the app
+        versionName = flutter.versionName // Version name for the app
+    }
+
+    signingConfigs { // Corrected here
+        release { // Ensure you have this block defined correctly
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = file(keystoreProperties['storeFile']) // Ensure this line is correct
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release // Use release signing configuration
+        }
+    }
+}
+
+flutter {
+    source = "../.." // Specify the Flutter source directory
+}
+
+// Apply Google services plugin at the end
+apply plugin: 'com.google.gms.google-services'
