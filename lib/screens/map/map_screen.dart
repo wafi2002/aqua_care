@@ -21,26 +21,28 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? _selectedSource;
   Set<Polyline> _polylines = {};
 
-  // Define some water source coordinates
+  //List of water source's coordinates
   final List<LatLng> waterSources = [
-    const LatLng(3.834870, 103.336563), // Source 1
-    const LatLng(4.602568, 101.075843), // Source 2
-    // Add more water source coordinates here if needed
+    const LatLng(3.834870, 103.336563),
+    const LatLng(4.602568, 101.075843),
+
   ];
 
-  // Define names corresponding to water sources
+  //List of water source
   final List<String> waterSourceNames = [
-    'Pengurusan Air Pahang Berhad', // Name for Source 1
-    'Lembaga Air Perak', // Name for Source 2
-    // Add more names here if needed
+    'Pengurusan Air Pahang Berhad',
+    'Lembaga Air Perak',
+
   ];
 
+  //Initial method to display on the screen
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
   }
 
+  //method to get tuser current location
   Future<void> _getCurrentLocation() async {
     Location location = Location();
 
@@ -71,6 +73,7 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //get user contro
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
     if (_currentPosition != null) {
@@ -79,6 +82,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
 
+  // create markers for the water source
   Set<Marker> _createMarkers() {
     Set<Marker> markers = waterSources.asMap().map((index, source) {
       return MapEntry(index, Marker(
@@ -106,6 +110,7 @@ class _MapScreenState extends State<MapScreen> {
     return markers;
   }
 
+  //fetch route method
   Future<void> _fetchRoute(LatLng origin, LatLng destination) async {
     String apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
     String url =
@@ -122,6 +127,7 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //draw a route from user location to selected water source
   void _createPolylines(dynamic data) {
     if (data['routes'].isNotEmpty) {
       final List<LatLng> polylineCoordinates = [];
@@ -145,6 +151,7 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //Zoom out method to display user location and selected water source
   void _zoomOutAndFocus(LatLng destination) {
     if (_currentPosition != null) {
       LatLngBounds bounds = LatLngBounds(
@@ -165,6 +172,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //Customized app bar
       appBar: AppBar(
         title: Container(
           alignment: Alignment.center,
@@ -180,15 +188,17 @@ class _MapScreenState extends State<MapScreen> {
         backgroundColor: Colors.blueAccent,
       ),
       body: Container(
+        //Set background color
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppStyles.mintGreen, AppStyles.lightMint], // Use any color combination you like
+            colors: [AppStyles.mintGreen, AppStyles.lightMint],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: Column(
           children: [
+            //Import water source map
             WaterSourceMap(
               currentPosition: _currentPosition,
               onMapCreated: _onMapCreated,
@@ -198,6 +208,7 @@ class _MapScreenState extends State<MapScreen> {
             const SizedBox(height: 7),
             Container(
               margin: const EdgeInsets.all(10.0),
+              //Import water source table
               child: WaterSourceTable(
                 waterSourceNames: waterSourceNames,
                 waterSources: waterSources,

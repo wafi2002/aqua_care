@@ -75,7 +75,7 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
       // Add the bold text
       spans.add(TextSpan(
         text: match.group(1),
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ));
       lastIndex = match.end;
     }
@@ -95,38 +95,40 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56.0), // Set height of the AppBar
+        preferredSize: const Size.fromHeight(56.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue[300], // Set background color of the AppBar
+            color: Colors.blue[300],
           ),
           child: AppBar(
-            backgroundColor: Colors.transparent, // Make the AppBar background transparent
-            elevation: 0, // Remove shadow
+            //customize appbar
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             title: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Add padding
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               decoration: BoxDecoration(
-                color: Colors.blue[600], // Set a background color for the title container
-                borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                color: Colors.blue[600],
+                borderRadius: BorderRadius.circular(8.0),
               ),
               constraints: BoxConstraints(
-                maxWidth: screenSize.width * 0.5, // Set a maximum width for the title container relative to screen size
+                maxWidth: screenSize.width * 0.5,
               ),
-              alignment: Alignment.center, // Center the title text
+              alignment: Alignment.center,
               child: const Row(
-                mainAxisSize: MainAxisSize.min, // Minimize the Row width
+                //customize prompt textfield
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     Icons.water,
-                    color: Colors.white, // Set the icon color to white
+                    color: Colors.white,
                   ),
-                  SizedBox(width: 8.0), // Add space between the icon and text
+                  SizedBox(width: 8.0),
                   Text(
                     'AquaBot',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // Text color
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -139,7 +141,7 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[300]!, Colors.blue[50]!], // Adjust the colors as needed
+            colors: [Colors.blue[300]!, Colors.blue[50]!],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -147,6 +149,7 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
         child: Column(
           children: [
             Expanded(
+              //Enable user to scroll the response
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -158,16 +161,16 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
                           ? Text(
                         widget.topic,
                         style: TextStyle(
-                          fontSize: screenSize.width * 0.06, // Responsive font size
+                          fontSize: screenSize.width * 0.06,
                           fontWeight: FontWeight.bold,
                         ),
                       )
-                          : SizedBox.shrink(),
+                          : const SizedBox.shrink(),
                     ),
-                    SizedBox(height: 16.0),
-                    Center( // Center the content container
+                    const SizedBox(height: 16.0),
+                    Center(
                       child: Container(
-                        width: 400, // Set your desired fixed width here
+                        width: 400,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
@@ -182,22 +185,22 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
                         ),
                         padding: EdgeInsets.all(16.0),
                         child: isLoading
-                            ? Center(
+                            ? const Center(
                           child: SpinKitWave(
                             color: Colors.blue,
-                            size: 50.0, // Adjust the size as needed
+                            size: 50.0,
                           ),
                         )
                             : RichText(
                           text: TextSpan(
                             children: generatedContent != null
                                 ? _parseContent(generatedContent!)
-                                : [TextSpan(text: 'No content available.')],
+                                : [const TextSpan(text: 'No content available.')],
                             style: TextStyle(
-                              fontSize: screenSize.width * 0.04, // Responsive font size
+                              fontSize: screenSize.width * 0.04,
                               color: Colors.black,
                               height: 1.5,
-                            ), // Default text style
+                            ),
                           ),
                         ),
                       ),
@@ -214,14 +217,14 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
                   labelText: 'Message AquaBot',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.send),
+                    icon: const Icon(Icons.send),
                     onPressed: _onSubmitPrompt,
                   ),
                 ),

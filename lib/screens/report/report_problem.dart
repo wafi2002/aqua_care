@@ -31,7 +31,10 @@ class _ReportState extends State<ReportProblem>{
     );
   }
 
+  //build input widget
   Widget _buildInputFields(){
+
+    //import report input fields
     return ReportInputFields(
         nameController: nameController,
         issueController: issueController,

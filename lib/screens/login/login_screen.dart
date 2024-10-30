@@ -1,8 +1,8 @@
 import 'package:aqua_care/base/bottom_nav_bar.dart';
 import 'package:aqua_care/screens/login/widgets/login_input_fields.dart';
 import 'package:aqua_care/screens/login/widgets/social_logins.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore if needed
-import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -80,8 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           }
         } on FirebaseAuthException catch (e) {
-          // Handle login errors
           print("Login failed: $e");
+
           // Optionally, show a snackbar or dialog with the error message
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
         } finally {
@@ -101,13 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return SocialLogins(
       onFacebookPressed: () {
-        // Add your Facebook login logic here
+
       },
       onGooglePressed: () {
-        // Add your Google login logic here
+
       },
       onOtherPressed: () {
-        // Add your other login logic here
+
       },
     );
   }
