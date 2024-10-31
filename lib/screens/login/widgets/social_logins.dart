@@ -32,8 +32,8 @@ class SocialLogins extends StatelessWidget {
                   onPressed: onFacebookPressed,
                   icon: Image.asset(
                     "assets/images/facebook.png",
-                    height: 60,
-                    width: 60,
+                    height: 70,
+                    width: 70,
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -41,8 +41,8 @@ class SocialLogins extends StatelessWidget {
                   onPressed: onGooglePressed,
                   icon: Image.asset(
                     "assets/images/google.png",
-                    height: 45,
-                    width: 45,
+                    height: 50,
+                    width: 50,
                   ),
                 ),
                 const SizedBox(width: 20),

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:aqua_care/base/res/styles/app_styles.dart';
 import 'package:aqua_care/screens/map/widgets/water_source_map.dart';
 import 'package:aqua_care/screens/map/widgets/water_source_table.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +24,12 @@ class _MapScreenState extends State<MapScreen> {
   final List<LatLng> waterSources = [
     const LatLng(3.834870, 103.336563),
     const LatLng(4.602568, 101.075843),
-
   ];
 
   //List of water source
   final List<String> waterSourceNames = [
     'Pengurusan Air Pahang Berhad',
     'Lembaga Air Perak',
-
   ];
 
   //Initial method to display on the screen
@@ -42,7 +39,7 @@ class _MapScreenState extends State<MapScreen> {
     _getCurrentLocation();
   }
 
-  //method to get tuser current location
+  //method to get user's current location
   Future<void> _getCurrentLocation() async {
     Location location = Location();
 
@@ -73,14 +70,13 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  //get user contro
+  //get user control
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
     if (_currentPosition != null) {
       _controller!.moveCamera(CameraUpdate.newLatLng(_currentPosition!));
     }
   }
-
 
   // create markers for the water source
   Set<Marker> _createMarkers() {
@@ -176,55 +172,65 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         title: Container(
           alignment: Alignment.center,
-          child: const Text(
-            'Water Sources',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: Container(
-        //Set background color
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppStyles.mintGreen, AppStyles.lightMint],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Column(
-          children: [
-            //Import water source map
-            WaterSourceMap(
-              currentPosition: _currentPosition,
-              onMapCreated: _onMapCreated,
-              markers: _createMarkers(),
-              polylines: _polylines,
-            ),
-            const SizedBox(height: 7),
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              //Import water source table
-              child: WaterSourceTable(
-                waterSourceNames: waterSourceNames,
-                waterSources: waterSources,
-                currentPosition: _currentPosition,
-                onSelectSource: (LatLng selectedSource) {
-                  setState(() {
-                    _selectedSource = selectedSource;
-                    _fetchRoute(_currentPosition!, selectedSource);
-                  });
-                },
+          child: const Row(
+            children: [
+              Icon(
+                Icons.water_drop, // Use the water drop icon
+                color: Colors.white, // Set the icon color
               ),
+              SizedBox(width: 8.0), // Add some space between the icon and text
+              Text(
+                'Water Sources',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+        backgroundColor: Colors.blueAccent.shade100,
+      ),
+      body: SingleChildScrollView( // Wrap the body with SingleChildScrollView
+        child: Container(
+          //Set background color
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blueAccent.shade100, Colors.blueAccent.shade200],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ],
+          ),
+          child: Column(
+            children: [
+              //Import water source map
+              WaterSourceMap(
+                currentPosition: _currentPosition,
+                onMapCreated: _onMapCreated,
+                markers: _createMarkers(),
+                polylines: _polylines,
+              ),
+              const SizedBox(height: 4),
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                //Import water source table
+                child: WaterSourceTable(
+                  waterSourceNames: waterSourceNames,
+                  waterSources: waterSources,
+                  currentPosition: _currentPosition,
+                  onSelectSource: (LatLng selectedSource) {
+                    setState(() {
+                      _selectedSource = selectedSource;
+                      _fetchRoute(_currentPosition!, selectedSource);
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }

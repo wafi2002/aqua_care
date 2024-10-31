@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:aqua_care/controller/bottom_nav_controller.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -63,29 +65,55 @@ class BottomNavBar extends StatelessWidget {
                   icon: AnimatedOpacity(
                     opacity: controller.selectedIndex.value == 1 ? 1.0 : 0.5,
                     duration: const Duration(milliseconds: 300),
-                    child: const Icon(FluentSystemIcons.ic_fluent_search_regular),
+                    child: const FaIcon(
+                      FontAwesomeIcons.earthAmericas, // Use the Earth Americas icon from Font Awesome
+                      size: 24.0, // Set the size of the icon
+                      color: Color(0xFF526400), // Default icon color
+                    ),
                   ),
-                  activeIcon: const Icon(FluentSystemIcons.ic_fluent_search_filled),
+                  activeIcon: const FaIcon(
+                    FontAwesomeIcons.earthAmericas, // Use the same icon for active state
+                    size: 24.0,
+                    color: Colors.blue, // Change color for active state
+                  ),
                   label: "Search",
                 ),
                 BottomNavigationBarItem(
                   icon: AnimatedOpacity(
                     opacity: controller.selectedIndex.value == 2 ? 1.0 : 0.5,
                     duration: const Duration(milliseconds: 300),
-                    child: const Icon(FluentSystemIcons.ic_fluent_document_regular),
+                    child: const FaIcon(
+                      FontAwesomeIcons.file, // Use the File icon from Font Awesome
+                      size: 24.0, // Set the size of the icon
+                      color: Color(0xFF526400), // Default icon color
+                    ),
                   ),
-                  activeIcon: const Icon(FluentSystemIcons.ic_fluent_document_filled),
+                  activeIcon: const FaIcon(
+                    FontAwesomeIcons.file, // Same icon for active state
+                    size: 24.0,
+                    color: Colors.blue, // Change color for active state
+                  ),
                   label: "Report",
                 ),
+
                 BottomNavigationBarItem(
                   icon: AnimatedOpacity(
                     opacity: controller.selectedIndex.value == 3 ? 1.0 : 0.5,
                     duration: const Duration(milliseconds: 300),
-                    child: const Icon(FluentSystemIcons.ic_fluent_settings_regular),
+                    child: const FaIcon(
+                      FontAwesomeIcons.robot, // Use the robot icon from Font Awesome
+                      size: 24.0, // Set the size of the icon
+                      color: Color(0xFF526400), // Default icon color
+                    ),
                   ),
-                  activeIcon: const Icon(FluentSystemIcons.ic_fluent_settings_filled),
+                  activeIcon: const FaIcon(
+                    FontAwesomeIcons.robot, // Use the same robot icon for active state
+                    size: 24.0,
+                    color: Colors.blue, // Change color for active state
+                  ),
                   label: "AI",
                 ),
+
               ],
             ),
           ),

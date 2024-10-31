@@ -115,7 +115,6 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
               ),
               alignment: Alignment.center,
               child: const Row(
-                //customize prompt textfield
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(

@@ -1,10 +1,13 @@
+import 'dart:io';
+import 'package:aqua_care/models/report.dart';
 import 'package:aqua_care/screens/report/widgets/custom_report_clipper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:aqua_care/screens/report/widgets/report_card_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 
 class ReportInputFields extends StatefulWidget {
@@ -24,8 +27,9 @@ class ReportInputFields extends StatefulWidget {
 class _ReportInputFieldsState extends State<ReportInputFields> {
   String? selectedDate;
   String? selectedTime;
-  XFile? selectedImage; // Stores the image selected via ImageUploadWidget
+  XFile? selectedImage;
   String? selectedIssue;
+  bool _isLoading = false;
   TextEditingController customIssueController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
@@ -58,77 +62,111 @@ class _ReportInputFieldsState extends State<ReportInputFields> {
   void _submitReport() async {
     if (widget.nameController.text.isEmpty ||
         addressController.text.isEmpty ||
-        selectedIssue == null) {
+        selectedIssue == null ||
+        (selectedIssue == 'Other' && customIssueController.text.isEmpty) ||
+        selectedDate == null ||
+        selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all required fields.')),
       );
-      return; // Exit early if fields are not filled
+      return;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
-      // Prepare the report data
-      final reportData = {
-        'name': widget.nameController.text,
-        'address': addressController.text,
-        'issue': selectedIssue == 'Other' ? customIssueController.text : selectedIssue,
-        'date': selectedDate,
-        'time': selectedTime,
-        // Add image URLs if you're uploading images to Firebase Storage
-      };
+      String? imageUrl;
+      if (selectedImage != null) {
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('report_images/${selectedImage!.name}');
+        await storageRef.putFile(File(selectedImage!.path));
+        imageUrl = await storageRef.getDownloadURL();
+      }
 
-      // Save report data to Firestore
-      await FirebaseFirestore.instance.collection('reports').add(reportData);
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final report = Report(
+        name: widget.nameController.text,
+        address: addressController.text,
+        issue: selectedIssue == 'Other' ? customIssueController.text : selectedIssue!,
+        date: selectedDate!,
+        time: selectedTime!,
+        imageUrl: imageUrl,
+        userId: currentUser?.uid ?? '', // Include user ID
+      );
 
-      // Show success dialog
-      _showSuccessDialog();
+      await FirebaseFirestore.instance.collection('reports').add(report.toMap());
 
-      _clearFields(); // Clear the fields after submission
+      setState(() {
+        _isLoading = false;
+      });
+
+      _showAnimatedSuccessDialog();
+      _clearFields();
     } catch (e) {
-      // Handle exceptions (e.g., network issues)
+      setState(() {
+        _isLoading = false;
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }
   }
 
-  void _showSuccessDialog() {
+  void _showAnimatedSuccessDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Success'),
-          content: Text('Your report has been submitted successfully!'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: _buildSuccessDialogContent(),
         );
       },
     );
   }
 
-
-  void _showSuccessModal() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Success'),
-          content: const Text('Your report has been submitted successfully!'),
-          actions: [
+  Widget _buildSuccessDialogContent() {
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle,
+              size: 70.0,
+              color: Colors.green,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Success',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Text('Your report has been submitted successfully!',  textAlign: TextAlign.center,),
+            const SizedBox(height: 20),
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
               child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -140,7 +178,7 @@ class _ReportInputFieldsState extends State<ReportInputFields> {
     selectedTime = null;
     selectedIssue = null;
     setState(() {
-      selectedImage = null; // Clears the selected image
+      selectedImage = null;
     });
   }
 
@@ -167,28 +205,42 @@ class _ReportInputFieldsState extends State<ReportInputFields> {
         SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: ReportCardWidget(
-              nameController: widget.nameController,
-              addressController: addressController,
-              customIssueController: customIssueController,
-              selectedIssue: selectedIssue,
-              onIssueChanged: (String? newValue) {
-                setState(() {
-                  selectedIssue = newValue;
-                  if (newValue == 'Other') {
-                    customIssueController.clear();
-                  }
-                });
-              },
-              onDateSelected: _onDateSelected,
-              onTimeSelected: _onTimeSelected,
-              onImagePicked: _handleImagePicked,
-              onSubmit: _submitReport,
+            child: Column(
+              children: [
+                ReportCardWidget(
+                  nameController: widget.nameController,
+                  addressController: addressController,
+                  customIssueController: customIssueController,
+                  selectedIssue: selectedIssue,
+                  onIssueChanged: (String? newValue) {
+                    setState(() {
+                      selectedIssue = newValue;
+                      if (newValue == 'Other') {
+                        customIssueController.clear();
+                      }
+                    });
+                  },
+                  onDateSelected: _onDateSelected,
+                  onTimeSelected: _onTimeSelected,
+                  onImagePicked: _handleImagePicked,
+                  onSubmit: _submitReport,
+                ),
+              ],
             ),
           ),
         ),
+        if (_isLoading) // Overlay loading indicator when `_isLoading` is true
+          Center(
+            child: Container(
+              color: Colors.black.withOpacity(0.5), // Semi-transparent background
+              child: const Center(
+                child: CircularProgressIndicator(), // Loading spinner
+              ),
+            ),
+          ),
       ],
     );
   }
 }
+
 

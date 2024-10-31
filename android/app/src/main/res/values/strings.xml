@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aqua Care</string>
+    <string name="facebook_app_id">563781826040847</string> <!-- Replace with your actual Facebook App ID -->
+    <string name="facebook_client_token">fb563781826040847</string> <!-- Replace with your actual Facebook Client Token -->
+    <string name="google_api_key">abb3cbc33b9232160e1a70042531d2de</string> <!-- Ensure this is correct -->
+</resources>

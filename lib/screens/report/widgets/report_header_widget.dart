@@ -1,3 +1,4 @@
+import 'package:aqua_care/screens/report/widgets/report_history_screen.dart';
 import 'package:flutter/material.dart';
 
 class ReportHeaderWidget extends StatelessWidget {
@@ -12,37 +13,50 @@ class ReportHeaderWidget extends StatelessWidget {
           child: Text(
             "Something happen?",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey,
             ),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(12.0),
-          decoration: BoxDecoration(
-            color: Colors.yellow,
-            borderRadius: BorderRadius.circular(20),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
 
-          ),
-          child: const Row(  // Wrap Text in Row
-            mainAxisSize: MainAxisSize.min, // Use min size for the Row
-            children: [
-              Icon(
-                Icons.report_problem, // Change this to your preferred icon
-                color: Colors.black,
-              ),
-              SizedBox(width: 8), // Add spacing between icon and text
-              Text(
-                "Report",
-                style: TextStyle(
+            const SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the report history screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ReportHistoryScreen()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFC107), // Button background color
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                textStyle: const TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
               ),
-            ],
-          ),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.document_scanner,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Report History",
+                    style: TextStyle(
+                      color: Colors.white, // Text color
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          ],
         ),
       ],
     );

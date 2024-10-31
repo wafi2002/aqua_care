@@ -8,20 +8,17 @@ class WaterSourceDetails extends StatelessWidget {
   // Create a map to hold descriptions for different sources
   final Map<String, String> sourceDescriptions = const {
     'Pengurusan Air Pahang Berhad':
-    '**Pengurusan Air Pahang Berhad (PAPB)** is a state-owned water supply company in Pahang, Malaysia, focused on delivering treated water to residents. It oversees water treatment and distribution, promotes water conservation, and uses modern technology for efficient service. PAPB plays a key role in ensuring clean water access while engaging with the community through educational initiatives.',
+    'Pengurusan Air Pahang Berhad (PAPB) is a state-owned water supply company in Pahang, Malaysia, focused on delivering treated water to residents. It oversees water treatment and distribution, promotes water conservation, and uses modern technology for efficient service. PAPB plays a key role in ensuring clean water access while engaging with the community through educational initiatives.',
     'Lembaga Air Perak':
-    '**Lembaga Air Perak (LAP)** is the state-owned water authority in Perak, Malaysia, tasked with managing and distributing clean water. It ensures sustainable water supply and quality standards while enhancing infrastructure like treatment plants. LAP promotes water conservation through community outreach and invests in technology to improve efficiency and meet urban demands.',
-    'well':
-    'Wells are deep holes drilled into the ground to access groundwater. They are essential for providing drinking water, especially in rural areas where surface water is not readily available.',
-    // Add more cases for different sources as needed
+    'Lembaga Air Perak (LAP) is the state-owned water authority in Perak, Malaysia, tasked with managing and distributing clean water. It ensures sustainable water supply and quality standards while enhancing infrastructure like treatment plants. LAP promotes water conservation through community outreach and invests in technology to improve efficiency and meet urban demands.',
+
   };
 
   // Create a map to hold contact information for different sources
   final Map<String, String> sourceContacts = const {
     'Pengurusan Air Pahang Berhad': 'Contact: 123-456-7890, Email: contact@papb.com.my',
     'Lembaga Air Perak': 'Contact: 123-456-7890, Email: contact@airperak.com.my',
-    'well': 'Contact: N/A, Email: N/A',
-    // Add more cases for different sources as needed
+
   };
 
   @override

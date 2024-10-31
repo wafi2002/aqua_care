@@ -56,3 +56,7 @@ flutter {
 
 // Apply Google services plugin at the end
 apply plugin: 'com.google.gms.google-services'
+
+dependencies{
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+}

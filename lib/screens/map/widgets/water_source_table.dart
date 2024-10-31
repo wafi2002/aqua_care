@@ -43,11 +43,11 @@ class WaterSourceTable extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: columnPadding, vertical: 12), // Increased vertical padding
               decoration: const BoxDecoration(
-                color: Colors.blue, // Background color
+                color: Colors.green, // Background color
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15.0), // Radius for the top left corner
                   topRight: Radius.circular(15.0), // Radius for the top right corner
-                ),
+                )
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

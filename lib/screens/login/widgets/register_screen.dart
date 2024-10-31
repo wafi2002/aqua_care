@@ -73,16 +73,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             print("User registered: ${emailController.text}");
 
-            // Show success message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Registration successful!")),
-            );
-
-            // Navigate to another screen (update to your desired screen)
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
+            // Show success dialog
+            _showSuccessDialog();
           } else {
             // Handle password mismatch
             ScaffoldMessenger.of(context).showSnackBar(
@@ -95,14 +87,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Registration failed: ${e.toString()}")),
           );
+        } finally {
+          setState(() {
+            _isLoading = false; // Reset loading state after registration
+          });
         }
-
       },
       onLoginPressed: () {
         Navigator.pop(context);
       },
     );
   }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 80,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Registration Successful",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Your account has been created successfully!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()), // Navigate to login screen
+                    );
+                  },
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   void onLoginPressed() {
     Navigator.pop(context);

@@ -1,5 +1,3 @@
-// report_card_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'date_time_picker.dart';
@@ -79,7 +77,8 @@ class ReportCardWidget extends StatelessWidget {
   }
 
   Widget _buildAddressField() {
-    return _buildTextField(addressController, "Incident Address",
+    return _buildTextField(
+      addressController, "Incident Address",
       icon: Icons.location_on,
       isLargeField: true,
       minLines: 3,
