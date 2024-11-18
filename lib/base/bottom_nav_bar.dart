@@ -1,13 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:aqua_care/screens/ai/educational_content_screen.dart';
 import 'package:aqua_care/screens/home/home_screen.dart';
 import 'package:aqua_care/screens/map/map_screen.dart';
 import 'package:aqua_care/screens/report/report_problem.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:aqua_care/controller/bottom_nav_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -30,16 +29,18 @@ class BottomNavBar extends StatelessWidget {
 
         // Wrapping the BottomNavigationBar with ClipRRect for rounded corners
         bottomNavigationBar: ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(30.0)), // Rounded corners
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(50.0), // Increased border radius
+          ),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.transparent,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
                   spreadRadius: 5,
                   blurRadius: 10,
-                  offset: const Offset(0, 3), // changes position of shadow
+                  offset: const Offset(0, 3), // Changes position of shadow
                 ),
               ],
             ),
@@ -95,7 +96,6 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   label: "Report",
                 ),
-
                 BottomNavigationBarItem(
                   icon: AnimatedOpacity(
                     opacity: controller.selectedIndex.value == 3 ? 1.0 : 0.5,
@@ -113,7 +113,6 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   label: "AI",
                 ),
-
               ],
             ),
           ),
@@ -122,4 +121,3 @@ class BottomNavBar extends StatelessWidget {
     });
   }
 }
-

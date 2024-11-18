@@ -20,26 +20,24 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? _selectedSource;
   Set<Polyline> _polylines = {};
 
-  //List of water source's coordinates
+  // List of water source's coordinates
   final List<LatLng> waterSources = [
     const LatLng(3.834870, 103.336563),
     const LatLng(4.602568, 101.075843),
   ];
 
-  //List of water source
+  // List of water source
   final List<String> waterSourceNames = [
     'Pengurusan Air Pahang Berhad',
     'Lembaga Air Perak',
   ];
 
-  //Initial method to display on the screen
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
   }
 
-  //method to get user's current location
   Future<void> _getCurrentLocation() async {
     Location location = Location();
 
@@ -48,7 +46,7 @@ class _MapScreenState extends State<MapScreen> {
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
-          return; // Location services are not enabled
+          return;
         }
       }
 
@@ -56,11 +54,10 @@ class _MapScreenState extends State<MapScreen> {
       if (permissionGranted == PermissionStatus.denied) {
         permissionGranted = await location.requestPermission();
         if (permissionGranted != PermissionStatus.granted) {
-          return; // Permissions are denied
+          return;
         }
       }
 
-      // Get the current location
       LocationData currentLocation = await location.getLocation();
       setState(() {
         _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
@@ -70,7 +67,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  //get user control
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
     if (_currentPosition != null) {
@@ -78,20 +74,22 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // create markers for the water source
   Set<Marker> _createMarkers() {
     Set<Marker> markers = waterSources.asMap().map((index, source) {
-      return MapEntry(index, Marker(
-        markerId: MarkerId(source.toString()),
-        position: source,
-        infoWindow: InfoWindow(title: waterSourceNames[index]), // Use the corresponding name
-        onTap: () {
-          setState(() {
-            _selectedSource = source; // Update the selected source
-            _fetchRoute(_currentPosition!, source); // Fetch the route to the selected source
-          });
-        },
-      ));
+      return MapEntry(
+        index,
+        Marker(
+          markerId: MarkerId(source.toString()),
+          position: source,
+          infoWindow: InfoWindow(title: waterSourceNames[index]),
+          onTap: () {
+            setState(() {
+              _selectedSource = source;
+              _fetchRoute(_currentPosition!, source);
+            });
+          },
+        ),
+      );
     }).values.toSet();
 
     if (_currentPosition != null) {
@@ -106,7 +104,6 @@ class _MapScreenState extends State<MapScreen> {
     return markers;
   }
 
-  //fetch route method
   Future<void> _fetchRoute(LatLng origin, LatLng destination) async {
     String apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
     String url =
@@ -116,14 +113,13 @@ class _MapScreenState extends State<MapScreen> {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      _createPolylines(data); // Create polylines based on the directions response
-      _zoomOutAndFocus(destination); // Zoom out and focus on the route
+      _createPolylines(data);
+      _zoomOutAndFocus(destination);
     } else {
       print('Failed to load directions: ${response.statusCode}');
     }
   }
 
-  //draw a route from user location to selected water source
   void _createPolylines(dynamic data) {
     if (data['routes'].isNotEmpty) {
       final List<LatLng> polylineCoordinates = [];
@@ -147,7 +143,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  //Zoom out method to display user location and selected water source
   void _zoomOutAndFocus(LatLng destination) {
     if (_currentPosition != null) {
       LatLngBounds bounds = LatLngBounds(
@@ -168,53 +163,51 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //Customized app bar
       appBar: AppBar(
-        title: Container(
-          alignment: Alignment.center,
-          child: const Row(
-            children: [
-              Icon(
-                Icons.water_drop, // Use the water drop icon
-                color: Colors.white, // Set the icon color
+        title: Row(
+          children: const [
+            Icon(
+              Icons.water_drop,
+              color: Colors.white,
+            ),
+            SizedBox(width: 8.0),
+            Text(
+              'Water Sources',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              SizedBox(width: 8.0), // Add some space between the icon and text
-              Text(
-                'Water Sources',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         backgroundColor: Colors.blueAccent.shade100,
       ),
-      body: SingleChildScrollView( // Wrap the body with SingleChildScrollView
-        child: Container(
-          //Set background color
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blueAccent.shade100, Colors.blueAccent.shade200],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+      body: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height, // Ensures it covers full height
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueAccent.shade100, Colors.blueAccent.shade200],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          child: Column(
-            children: [
-              //Import water source map
-              WaterSourceMap(
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: WaterSourceMap(
                 currentPosition: _currentPosition,
                 onMapCreated: _onMapCreated,
                 markers: _createMarkers(),
                 polylines: _polylines,
               ),
-              const SizedBox(height: 4),
-              Container(
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
                 margin: const EdgeInsets.all(10.0),
-                //Import water source table
                 child: WaterSourceTable(
                   waterSourceNames: waterSourceNames,
                   waterSources: waterSources,
@@ -227,8 +220,8 @@ class _MapScreenState extends State<MapScreen> {
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

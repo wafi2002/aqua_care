@@ -13,7 +13,7 @@ if (keystoreFile.exists()) {
 }
 
 android {
-    namespace = "com.aquacare.aqua_care" // Set the namespace for your app correctly
+    namespace = "com.aquacare.aqua_care"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
